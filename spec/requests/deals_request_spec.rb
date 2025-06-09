@@ -70,7 +70,7 @@ RSpec.describe "Deals API", type: :request do
 
       json_response = JSON.parse(response.body)
 
-      expected_keys = %w[id title discount location price ends_at featured image]
+      expected_keys = %w[id title discount merchant price ends_at featured image]
       expect(first_deal_json.keys.sort).to eq expected_keys.sort
       expect(first_deal_json["id"]).to be_a(Numeric)
       expect(first_deal_json["title"]).to be_a(String)
@@ -79,7 +79,7 @@ RSpec.describe "Deals API", type: :request do
       expect(first_deal_json["ends_at"]).to match(/\d{4}-\d{2}-\d{2}/)
       expect(first_deal_json["featured"]).to be_in([ true, false ])
       expect(first_deal_json["image"]).to be_a(String).or be_nil
-      expect(first_deal_json["location"]).to be_a(Hash)
+      expect(first_deal_json["merchant"]).to be_a(Hash)
     end
 
     it "ranks deals by location when lat/lon are provided" do

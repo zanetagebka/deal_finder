@@ -12,7 +12,7 @@ class DealSerializer
       ends_at:  @deal.expiry_date.to_s,
       featured: @deal.featured_deal,
       image:    @deal.image_url,
-      location: LocationSerializer.new(@deal.location).as_json
+      merchant: MerchantSerializer.new(@deal.merchant).as_json
     }
   end
 end

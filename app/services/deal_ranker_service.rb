@@ -34,7 +34,7 @@ class DealRankerService
 
     return 1.0 unless deal_lat && deal_lon
 
-    km = Geocoder::Calculations.distance_between([lat, lon], [deal_lat, deal_lon])
+    km = Geocoder::Calculations.distance_between([ lat, lon ], [ deal_lat, deal_lon ])
     1.0 / (1.0 + km) # 0 km → 1 , 9 km → 0.1
   end
 end

@@ -1,6 +1,7 @@
 # Deal Finder
 
-A Ruby on Rails application for finding and filtering deals based on various criteria including location, price, categories, and more.
+A Ruby on Rails application for finding and filtering deals based on various criteria including location, price,
+categories, and more.
 
 ## Features
 
@@ -75,6 +76,7 @@ The application will be available at http://localhost:3000
 `GET /api/v1/deals`
 
 Parameters:
+
 - `category`: Filter by category name
 - `subcategory`: Filter by subcategory name
 - `min`: Minimum price
@@ -88,6 +90,7 @@ Parameters:
 - `page`: Page number for pagination
 
 Response:
+
 ```json
 [
   {
@@ -98,13 +101,20 @@ Response:
     "discount_price": 75.0,
     "category": "Food",
     "subcategory": "Restaurants",
-    "location": {
-      "name": "Store Name",
-      "address": "123 Main St",
-      "latitude": 40.7128,
-      "longitude": -74.0060
+    "merchant": {
+      "name": "Merchant Name",
+      "rating": 9.5,
+      "location": {
+        "name": "Store Name",
+        "address": "123 Main St",
+        "latitude": 40.7128,
+        "longitude": -74.0060
+      }
     },
-    "tags": ["discount", "food"],
+    "tags": [
+      "discount",
+      "food"
+    ],
     "featured_deal": true,
     "available_quantity": 10,
     "expiry_date": "2023-12-31"

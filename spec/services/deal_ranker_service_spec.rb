@@ -32,7 +32,7 @@ RSpec.describe DealRankerService, type: :service do
     )
   end
 
-  let(:deal_scope) { Deal.where(id: [d_big_discount.id, d_high_popularity.id]) }
+  let(:deal_scope) { Deal.where(id: [ d_big_discount.id, d_high_popularity.id ]) }
 
   it "prefers higher weighted score (discount 0.6 weight, popularity 0.4)" do
     service = DealRankerService.new(deal_scope, discount: 0.6, popularity: 0.4, distance: 0.0)

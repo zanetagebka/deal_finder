@@ -82,7 +82,7 @@ jobs:
           fi
 
       - name: Run RSpec tests
-        run: bin/rspec
+        run: bundle exec rspec
 
       - name: Upload test results
         if: always()

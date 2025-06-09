@@ -7,8 +7,9 @@ class JsonImportService
     private
 
     def create_deal(h)
-      Deal.create!(
-        id:                 h["id"],
+      deal = Deal.find_or_initialize_by(id: h["id"])
+
+      deal.assign_attributes(
         title:              h["title"],
         description:        h["description"],
         original_price:     h["originalPrice"],
@@ -35,6 +36,9 @@ class JsonImportService
         fine_print:          h["finePrint"],
         meta:               h.except("location")
       )
+
+      deal.save!
+      deal
     end
   end
 end

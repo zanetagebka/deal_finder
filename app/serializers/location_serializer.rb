@@ -4,6 +4,8 @@ class LocationSerializer
   end
 
   def as_json(*)
+    return {} unless @location
+
     {
       id: @location.id,
       latitude: @location.latitude,

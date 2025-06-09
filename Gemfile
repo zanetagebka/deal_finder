@@ -51,3 +51,5 @@ gem "rspec-rails", "~> 8.0", groups: [:development, :test]
 gem "kaminari", "~> 1.2"
 gem "geocoder", "~> 1.8"
 gem 'acts-as-taggable-on'
+gem "shoulda-matchers", "~> 6.0"
+

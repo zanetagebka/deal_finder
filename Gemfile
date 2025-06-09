@@ -46,6 +46,11 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 end
 
+group :test do
+  gem "factory_bot_rails"
+
+end
+
 gem "rspec-rails", "~> 8.0", groups: [ :development, :test ]
 
 gem "kaminari", "~> 1.2"

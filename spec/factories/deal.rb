@@ -11,8 +11,6 @@ FactoryBot.define do
     expiry_date { 1.month.from_now }
     featured_deal { false }
 
-    # Associations
     association :merchant
-    association :location
   end
 end

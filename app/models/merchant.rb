@@ -1,5 +1,6 @@
 class Merchant < ApplicationRecord
   has_many :deals, dependent: :nullify
+  belongs_to :location, optional: true
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
 

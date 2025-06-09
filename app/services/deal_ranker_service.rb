@@ -9,7 +9,7 @@ class DealRankerService
   end
 
   def ranked(lat: nil, lon: nil)
-    @deals.includes(:location).to_a.sort_by { |d| -score(d, lat:, lon:) }
+    @deals.includes(:location, :merchant).to_a.sort_by { |d| -score(d, lat:, lon:) }
   end
 
   private
@@ -25,8 +25,12 @@ class DealRankerService
   def distance_component(deal, lat, lon)
     return 1.0 unless lat && lon
 
-    deal_lat = deal.location&.latitude
-    deal_lon = deal.location&.longitude
+    # Get location through merchant
+    deal_location = deal.merchant.location
+    return 1.0 unless deal_location
+
+    deal_lat = deal_location.latitude
+    deal_lon = deal_location.longitude
 
     return 1.0 unless deal_lat && deal_lon
 

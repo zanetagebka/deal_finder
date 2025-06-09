@@ -7,13 +7,15 @@ class JsonImportService
     private
 
     def upsert_deal(h)
-      merchant = Merchant.find_or_create_by_normalised(
-        h["merchantName"], h["merchantRating"])
-
-      deal = Deal.find_or_initialize_by(id: h["id"])
-
       location_attrs = extract_location_attributes(h)
       location = find_or_create_location(location_attrs) if location_attrs[:latitude].present? && location_attrs[:longitude].present?
+
+      merchant = Merchant.find_or_initialize_by(name: h["merchantName"].strip)
+      merchant.rating = h["merchantRating"]
+      merchant.location = location
+      merchant.save!
+
+      deal = Deal.find_or_initialize_by(id: h["id"])
 
       deal.assign_attributes(
         title: h["title"],
@@ -23,7 +25,6 @@ class JsonImportService
         discount_percentage: h["discountPercentage"],
         category: h["category"],
         subcategory: h["subcategory"],
-        location: location,
         merchant: merchant,
         quantity_sold: h["quantitySold"],
         review_count: h["reviewCount"],

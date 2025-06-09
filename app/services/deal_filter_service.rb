@@ -83,8 +83,9 @@ class DealFilterService
     lat, lon, radius = @p.values_at(:lat, :lon, :radius)
     return q unless lat && lon && radius
 
-    nearby_locations = Location.near([ lat, lon ], radius, units: :km, order: false)
+    nearby_locations = Location.near([lat, lon], radius, units: :km, order: false)
     location_ids = nearby_locations.pluck(:id)
-    q.where(location_id: location_ids)
+
+    q.joins(:merchant).where(merchants: { location_id: location_ids })
   end
 end

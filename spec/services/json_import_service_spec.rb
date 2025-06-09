@@ -5,8 +5,8 @@ RSpec.describe JsonImportService do
 
   before(:all) do
     Deal.delete_all
-    Location.delete_all
     Merchant.delete_all
+    Location.delete_all
   end
 
   it "creates 16 deals from fixture" do

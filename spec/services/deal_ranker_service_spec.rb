@@ -3,17 +3,16 @@ require 'rails_helper'
 RSpec.describe DealRankerService, type: :service do
   before(:all) do
     Deal.delete_all
-    Location.delete_all
     Merchant.delete_all
+    Location.delete_all
   end
 
-  let(:merchant) { create(:merchant) }
   let(:location) { create(:location, latitude: 34.0522, longitude: -118.2437) }
+  let(:merchant) { create(:merchant, location:) }
 
   let!(:d_big_discount) do
     create(:deal,
            merchant:,
-           location:,
            title: "Big Discount Deal",
            discount_percentage: 70,
            original_price: 100,
@@ -25,7 +24,6 @@ RSpec.describe DealRankerService, type: :service do
   let!(:d_high_popularity) do
     create(:deal,
            merchant:,
-           location:,
            title: "High Popularity Deal",
            discount_percentage: 20,
            original_price: 100,

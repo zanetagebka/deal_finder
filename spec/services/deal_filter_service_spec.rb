@@ -17,6 +17,10 @@ RSpec.describe DealFilterService do
     expect(ids(tag: "Wellness")).to eq %w[2]
   end
 
+  it "filters by tag (multiple tags)" do
+    expect(ids(tag: %w[Wellness indoor digital])).to match_array %w[2 3 4]
+  end
+
   it "excludes expired deals automatically" do
     travel_to Date.new(2025, 10, 1) do
       expect(ids).not_to include("2")

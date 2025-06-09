@@ -8,7 +8,6 @@ class CreateDeals < ActiveRecord::Migration[8.0]
       t.integer :discount_percentage, null: false
       t.string :category, null: false
       t.string :subcategory
-      t.json :tags, default: []
 
       t.decimal :latitude, precision: 10, scale: 6
       t.decimal :longitude, precision: 10, scale: 6

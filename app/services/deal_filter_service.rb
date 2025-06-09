@@ -44,8 +44,20 @@ class DealFilterService
   def filter_by_tag(q)
     return q unless @p[:tag].present?
 
-    tag_value = @p[:tag].downcase
-    q.where("LOWER(tags::text) LIKE ?", "%#{tag_value}%")
+    tags = Array(@p[:tag])
+    if tags.size == 1 && tags.first.is_a?(String) && tags.first.include?(",")
+      tags = tags.first.split(",").map(&:strip)
+    end
+
+    tags = tags.map(&:downcase)
+
+    condition = tags.map do |tag|
+      "LOWER(tags.name) LIKE LOWER(?)"
+    end.join(" OR ")
+
+    q.joins(:taggings, :tags)
+     .where(condition, *tags.map)
+     .distinct
   end
 
   def filter_by_featured(q)

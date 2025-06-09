@@ -1,6 +1,7 @@
 class Deal < ApplicationRecord
 
   reverse_geocoded_by :latitude, :longitude
+  acts_as_taggable_on :tags
 
   # returns a float 0.0-1.0 (e.g. 0.6 = 60 % discount)
   def discount_pct

@@ -84,5 +84,4 @@ class DealFilterService
     location_ids = nearby_locations.pluck(:id)
     q.where(location_id: location_ids)
   end
-
 end

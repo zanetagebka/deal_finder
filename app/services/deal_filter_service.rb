@@ -8,7 +8,7 @@ class DealFilterService
   end
 
   def call
-    query = Deal.includes(:location).all
+    query = Deal.includes(:location, :merchant).all
     query = filter_by_category(query) if @p[:category].present?
     query = filter_by_subcategory(query) if @p[:subcategory].present?
     query = filter_by_price_range(query) if @p[:min].present? || @p[:max].present?
@@ -16,7 +16,8 @@ class DealFilterService
     query = filter_by_radius(query) if @p[:lat].present? && @p[:lon].present? && @p[:radius].present?
     query = filter_by_featured(query) if @p[:featured].present?
     query = filter_by_available(query) if @p[:available].present?
-    filter_not_expired(query)
+    query = filter_not_expired(query)
+    query.distinct
   end
 
   private
@@ -44,20 +45,21 @@ class DealFilterService
   def filter_by_tag(q)
     return q unless @p[:tag].present?
 
-    tags = Array(@p[:tag])
+    tags = normalize_tags_input(@p[:tag])
+
+    q.includes(:tags).joins(:tags)
+     .where("LOWER(tags.name) SIMILAR TO ?", "%(#{tags.join('|')})%")
+     .distinct
+  end
+
+  def normalize_tags_input(tag_param)
+    tags = Array(tag_param)
+
     if tags.size == 1 && tags.first.is_a?(String) && tags.first.include?(",")
       tags = tags.first.split(",").map(&:strip)
     end
 
-    tags = tags.map(&:downcase)
-
-    condition = tags.map do |tag|
-      "LOWER(tags.name) LIKE LOWER(?)"
-    end.join(" OR ")
-
-    q.joins(:taggings, :tags)
-     .where(condition, *tags.map)
-     .distinct
+    tags.map(&:downcase)
   end
 
   def filter_by_featured(q)
@@ -76,6 +78,7 @@ class DealFilterService
   def filter_not_expired(q)
     q.where("expiry_date >= ?", Time.current.to_date)
   end
+
   def filter_by_radius(q)
     lat, lon, radius = @p.values_at(:lat, :lon, :radius)
     return q unless lat && lon && radius

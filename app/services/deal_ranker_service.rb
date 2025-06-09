@@ -1,13 +1,15 @@
 class DealRankerService
   DEFAULT_WEIGHTS = { discount: 0.6, popularity: 0.3, distance: 0.1 }.freeze
 
-  def initialize(deals, weights = {})
-    @deals = deals
+  def initialize(deal_scope, weights = {})
+    @deals = deal_scope.select(
+      :id, :discount_percentage, :quantity_sold, :location_id, :merchant_id
+    )
     @weights = DEFAULT_WEIGHTS.merge(weights)
   end
 
   def ranked(lat: nil, lon: nil)
-    @deals.sort_by { |d| -score(d, lat:, lon:) }
+    @deals.includes(:location).to_a.sort_by { |d| -score(d, lat:, lon:) }
   end
 
   private
@@ -23,12 +25,12 @@ class DealRankerService
   def distance_component(deal, lat, lon)
     return 1.0 unless lat && lon
 
-    deal_lat = deal.location.latitude
-    deal_lon = deal.location.longitude
+    deal_lat = deal.location&.latitude
+    deal_lon = deal.location&.longitude
 
     return 1.0 unless deal_lat && deal_lon
 
-    km = Geocoder::Calculations.distance_between([ lat, lon ], [ deal_lat, deal_lon ])
-    1.0 / (1.0 + km)  # 0 km → 1 , 9 km → 0.1
+    km = Geocoder::Calculations.distance_between([lat, lon], [deal_lat, deal_lon])
+    1.0 / (1.0 + km) # 0 km → 1 , 9 km → 0.1
   end
 end

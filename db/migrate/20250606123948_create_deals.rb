@@ -9,9 +9,6 @@ class CreateDeals < ActiveRecord::Migration[8.0]
       t.string :category, null: false
       t.string :subcategory
 
-      t.string :merchant_name, null: false
-      t.decimal :merchant_rating, precision: 3, scale: 2
-
       t.integer :quantity_sold, default: 0
       t.integer :review_count, default: 0
       t.decimal :average_rating, precision: 3, scale: 2

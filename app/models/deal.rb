@@ -1,5 +1,6 @@
 class Deal < ApplicationRecord
   belongs_to :location, optional: true
+  belongs_to :merchant
 
   acts_as_taggable_on :tags
 

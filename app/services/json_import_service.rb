@@ -7,6 +7,9 @@ class JsonImportService
     private
 
     def upsert_deal(h)
+      merchant = Merchant.find_or_create_by_normalised(
+        h["merchantName"], h["merchantRating"])
+
       deal = Deal.find_or_initialize_by(id: h["id"])
 
       location_attrs = extract_location_attributes(h)
@@ -21,8 +24,7 @@ class JsonImportService
         category: h["category"],
         subcategory: h["subcategory"],
         location: location,
-        merchant_name: h["merchantName"],
-        merchant_rating: h["merchantRating"],
+        merchant: merchant,
         quantity_sold: h["quantitySold"],
         review_count: h["reviewCount"],
         average_rating: h["averageRating"],

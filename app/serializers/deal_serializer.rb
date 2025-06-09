@@ -12,22 +12,7 @@ class DealSerializer
       ends_at:  @deal.expiry_date.to_s,
       featured: @deal.featured_deal,
       image:    @deal.image_url,
-      location: location_json
-    }
-  end
-
-  private
-
-  def location_json(location = @deal.location)
-    return nil unless location
-
-    {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      address: location.address,
-      city: location.city,
-      state: location.state,
-      zip_code: location.zip_code
+      location: LocationSerializer.new(@deal.location).as_json
     }
   end
 end

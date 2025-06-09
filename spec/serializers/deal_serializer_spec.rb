@@ -4,6 +4,7 @@ RSpec.describe DealSerializer do
   let(:location) do
     instance_double(
       Location,
+      id: 1,
       latitude: 37.7749,
       longitude: -122.4194,
       address: "123 Main St",
@@ -37,6 +38,7 @@ RSpec.describe DealSerializer do
                                                    featured: true,
                                                    image: "http://ex.com/sushi.jpg",
                                                    location: {
+                                                     id: 1,
                                                       latitude: 37.7749,
                                                       longitude: -122.4194,
                                                       address: "123 Main St",

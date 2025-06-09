@@ -1,6 +1,18 @@
 require "rails_helper"
 
 RSpec.describe DealSerializer do
+  let(:location) do
+    instance_double(
+      Location,
+      latitude: 37.7749,
+      longitude: -122.4194,
+      address: "123 Main St",
+      city: "San Francisco",
+      state: "CA",
+      zip_code: "94103"
+    )
+  end
+
   let(:deal) do
     instance_double(
       Deal,
@@ -10,7 +22,8 @@ RSpec.describe DealSerializer do
       discount_price: 44.99,
       expiry_date: Date.new(2025, 7, 15),
       image_url: "http://ex.com/sushi.jpg",
-      featured_deal: true
+      featured_deal: true,
+      location: location
     )
   end
 
@@ -22,7 +35,15 @@ RSpec.describe DealSerializer do
                                                    price: 44.99,
                                                    ends_at: "2025-07-15",
                                                    featured: true,
-                                                   image: "http://ex.com/sushi.jpg"
+                                                   image: "http://ex.com/sushi.jpg",
+                                                   location: {
+                                                      latitude: 37.7749,
+                                                      longitude: -122.4194,
+                                                      address: "123 Main St",
+                                                      city: "San Francisco",
+                                                      state: "CA",
+                                                      zip_code: "94103"
+                                                    }
                                                  )
   end
 end

@@ -9,6 +9,9 @@ class JsonImportService
     def upsert_deal(h)
       deal = Deal.find_or_initialize_by(id: h["id"])
 
+      location_attrs = extract_location_attributes(h)
+      location = find_or_create_location(location_attrs) if location_attrs[:latitude].present? && location_attrs[:longitude].present?
+
       deal.assign_attributes(
         title: h["title"],
         description: h["description"],
@@ -17,14 +20,7 @@ class JsonImportService
         discount_percentage: h["discountPercentage"],
         category: h["category"],
         subcategory: h["subcategory"],
-
-        latitude: h.dig("location", "lat"),
-        longitude: h.dig("location", "lng"),
-        address: h.dig("location", "address"),
-        city: h.dig("location", "city"),
-        state: h.dig("location", "state"),
-        zip_code: h.dig("location", "zipCode"),
-
+        location: location,
         merchant_name: h["merchantName"],
         merchant_rating: h["merchantRating"],
         quantity_sold: h["quantitySold"],
@@ -42,6 +38,37 @@ class JsonImportService
 
       deal.save!
       deal
+    end
+
+    def extract_location_attributes(h)
+      {
+        latitude: h.dig("location", "lat"),
+        longitude: h.dig("location", "lng"),
+        address: h.dig("location", "address"),
+        city: h.dig("location", "city"),
+        state: h.dig("location", "state"),
+        zip_code: h.dig("location", "zipCode")
+      }
+    end
+
+    def find_or_create_location(attrs)
+      location = Location.find_by(
+        latitude: attrs[:latitude],
+        longitude: attrs[:longitude]
+      )
+
+      unless location
+        location = Location.create!(
+          latitude: attrs[:latitude],
+          longitude: attrs[:longitude],
+          address: attrs[:address],
+          city: attrs[:city],
+          state: attrs[:state],
+          zip_code: attrs[:zip_code]
+        )
+      end
+
+      location
     end
   end
 end

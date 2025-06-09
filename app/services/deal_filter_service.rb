@@ -1,6 +1,6 @@
 class DealFilterService
   def self.call(params = {})
-    new(params.symbolize_keys).call
+    new(params).call
   end
 
   def initialize(params)
@@ -8,7 +8,7 @@ class DealFilterService
   end
 
   def call
-    query = Deal.all
+    query = Deal.includes(:location).all
     query = filter_by_category(query) if @p[:category].present?
     query = filter_by_subcategory(query) if @p[:subcategory].present?
     query = filter_by_price_range(query) if @p[:min].present? || @p[:max].present?
@@ -77,9 +77,12 @@ class DealFilterService
     q.where("expiry_date >= ?", Time.current.to_date)
   end
   def filter_by_radius(q)
-    lat, lon, r = @p.values_at(:lat, :lon, :radius)
-    return q unless lat && lon && r
+    lat, lon, radius = @p.values_at(:lat, :lon, :radius)
+    return q unless lat && lon && radius
 
-    q.near([ lat, lon ], r, order: false)
+    nearby_locations = Location.near([ lat, lon ], radius, units: :km, order: false)
+    location_ids = nearby_locations.pluck(:id)
+    q.where(location_id: location_ids)
   end
+
 end

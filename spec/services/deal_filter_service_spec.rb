@@ -33,4 +33,12 @@ RSpec.describe DealFilterService do
     expect(ids(lat: 37.7749, lon: -122.4194, radius: 7))
       .not_to include("5") # Napa
   end
+
+  it "filters by category (case-insensitive)" do
+    expect(ids(category: "Food")).to match_array %w[1 5 8 16]
+  end
+
+  it "filters by subcategory (case-insensitive)" do
+    expect(ids(subcategory: "japanese")).to match_array %w[1]
+  end
 end

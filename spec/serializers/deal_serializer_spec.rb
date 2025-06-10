@@ -29,10 +29,13 @@ RSpec.describe DealSerializer do
       Deal,
       id: 99,
       title: "Half-Price Sushi",
+      category: "Food",
+      subcategory: "Japanese",
       discount_percentage: 50,
       discount_price: 44.99,
       expiry_date: Date.new(2025, 7, 15),
       image_url: "http://ex.com/sushi.jpg",
+      tag_list: ["Sushi"],
       featured_deal: true,
       merchant:
     )
@@ -42,11 +45,14 @@ RSpec.describe DealSerializer do
     expect(described_class.new(deal).as_json).to eq(
                                                    id: 99,
                                                    title: "Half-Price Sushi",
+                                                   category: "Food",
+                                                   subcategory: "Japanese",
                                                    discount: 50,
                                                    price: 44.99,
                                                    ends_at: "2025-07-15",
                                                    featured: true,
                                                    image: "http://ex.com/sushi.jpg",
+                                                   tags: ["Sushi"],
                                                    merchant: {
                                                       id: 1,
                                                       name: "Sushi Place",

@@ -18,6 +18,9 @@ categories, and more.
 - Rails 8.0.2
 - PostgreSQL 15+
 
+## Quickstart
+
+For a fully automated setup, you can simply run `bin/setup`.
 ## Setup
 
 1. **Install Ruby and Dependencies**
@@ -120,4 +123,24 @@ Response:
     "expiry_date": "2023-12-31"
   }
 ]
+```
+
+## API Quick Test
+
+After starting the application, you can test the API with:
+
+```bash
+curl -s "http://localhost:3000/api/v1/deals?tag=wellness,dinner" | jq
+```
+
+This command fetches all deals tagged with `wellness` or `dinner` and pretty-prints the JSON response.  
+Make sure you have [`jq`](https://stedolan.github.io/jq/) installed for pretty output.
+
+curl -s "http://localhost:3000/api/v1/deals?category=Food&min=10&max=50" | jq
+
+curl -s "http://localhost:3000/api/v1/deals?lat=40.7128&lon=-74.0060&radius=5" | jq
+
+curl -s "http://localhost:3000/api/v1/deals?category=Wellness&tag=spa,relaxation&min=20&max=100&featured=true" | jq
+
+curl -s "http://localhost:3000/api/v1/deals?tag=wellness,dinner" | jq
 ```

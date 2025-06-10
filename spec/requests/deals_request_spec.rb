@@ -70,7 +70,7 @@ RSpec.describe "Deals API", type: :request do
 
       json_response = JSON.parse(response.body)
 
-      expected_keys = %w[id title discount merchant price ends_at featured image]
+      expected_keys = %w[id title discount category subcategory merchant price ends_at featured image tags]
       expect(first_deal_json.keys.sort).to eq expected_keys.sort
       expect(first_deal_json["id"]).to be_a(Numeric)
       expect(first_deal_json["title"]).to be_a(String)

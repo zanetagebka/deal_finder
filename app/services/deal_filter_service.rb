@@ -25,13 +25,13 @@ class DealFilterService
   def filter_by_category(q)
     return q unless @p[:category].present?
 
-    q.where("LOWER(category) = ?", @p[:category].downcase)
+    q.where("LOWER(category) ILIKE ?", "%#{@p[:category].downcase}%")
   end
 
   def filter_by_subcategory(q)
     return q unless @p[:subcategory].present?
 
-    q.where("LOWER(subcategory) = ?", @p[:subcategory].downcase)
+    q.where("LOWER(subcategory) ILIKE ?", "%#{@p[:subcategory].downcase}%")
   end
 
   def filter_by_price_range(q)

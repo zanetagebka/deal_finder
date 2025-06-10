@@ -8,7 +8,7 @@ class DealFilterService
   end
 
   def call
-    query = Deal.includes(:location, :merchant).joins(:location, :merchant).all
+    query = Deal.includes(merchant: :location).joins(merchant: :location).all
     query = filter_by_category(query) if @p[:category].present?
     query = filter_by_subcategory(query) if @p[:subcategory].present?
     query = filter_by_price_range(query) if @p[:min].present? || @p[:max].present?

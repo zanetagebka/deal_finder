@@ -9,23 +9,21 @@ class DealPresenterService
   end
 
   def call
-    if @ranked_deals_or_ids.is_a?(ActiveRecord::Relation)
-      deals = @ranked_deals_or_ids
+    deals = if @ranked_deals_or_ids.is_a?(ActiveRecord::Relation)
+      @ranked_deals_or_ids
     else
       deal_ids = @ranked_deals_or_ids
-
-      deals = Deal.includes(:tags, merchant: :location)
-                  .where(id: deal_ids)
-
-      if deal_ids.any?
-        deals = deals.order(Arel.sql("array_position(ARRAY[#{deal_ids.join(',')}], id)"))
-      end
+      Deal.where(id: deal_ids)
+          .order(Arel.sql("array_position(ARRAY[#{deal_ids.join(',')}], deals.id)"))
     end
 
-    paged_deals = Kaminari.paginate_array(deals.to_a).page(@params[:page]).per(10)
+    deals = deals.joins(:tags, :taggings, merchant: :location).includes(
+      :tags, :taggings,
+      merchant: { location: {} }
+    )
 
-    paged_deals.map do |deal|
-      DealSerializer.new(deal).as_json
-    end
+    deals.page(@params[:page])
+         .per(10)
+         .map { |deal| DealSerializer.new(deal).as_json }
   end
 end

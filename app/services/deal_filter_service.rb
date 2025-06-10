@@ -8,7 +8,7 @@ class DealFilterService
   end
 
   def call
-    query = Deal.includes(merchant: :location).joins(merchant: :location).all
+    query = Deal.includes(:tags, merchant: :location).joins(merchant: :location).all
     query = filter_by_category(query) if @p[:category].present?
     query = filter_by_subcategory(query) if @p[:subcategory].present?
     query = filter_by_price_range(query) if @p[:min].present? || @p[:max].present?
@@ -47,7 +47,7 @@ class DealFilterService
 
     tags = normalize_tags_input(@p[:tag])
 
-    q.includes(:tags).joins(:tags)
+    q.joins(:tags)
      .where("LOWER(tags.name) SIMILAR TO ?", "%(#{tags.join('|')})%")
      .distinct
   end

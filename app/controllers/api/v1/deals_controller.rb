@@ -68,11 +68,23 @@ class Api::V1::DealsController < ApplicationController
   #   }
   # ]
   def index
-    filtered_deals_scope = DealFilterService.call(params.permit!.to_h)
+    filter_params = DealsFilterParams.new(allowed_filter_params)
+    unless filter_params.valid?
+      return render json: { errors: filter_params.errors.full_messages }, status: :bad_request
+    end
+    filtered_deals_scope = DealFilterService.call(filter_params.sanitized_params)
     ranked_deal_ids = DealRankerService.new(filtered_deals_scope).ranked(
-      lat: params[:lat], lon: params[:lon]
+      lat: filter_params.lat, lon: filter_params.lon
     ).map(&:id)
 
-    render json: DealPresenterService.call(ranked_deal_ids, params)
+    render json: DealPresenterService.call(ranked_deal_ids, filter_params.sanitized_params)
+  end
+
+  private
+
+  def allowed_filter_params
+    params.permit(
+      :category, :subcategory, :min, :max, :lat, :lon, :radius, :tag, :featured, :available, :page
+    ).to_h
   end
 end

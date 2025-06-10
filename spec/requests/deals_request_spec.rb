@@ -90,5 +90,28 @@ RSpec.describe "Deals API", type: :request do
       expect(json_response).to be_an(Array)
       expect(json_response.size).to eq 10
     end
+
+    it "returns 400 for negative min price" do
+      get api_v1_deals_path, params: { min: -10 }
+      expect(response).to have_http_status(:bad_request)
+      expect(JSON.parse(response.body)["errors"]).to include(/Min/)
+    end
+
+    it "returns 400 for out-of-range latitude" do
+      get api_v1_deals_path, params: { lat: 200 }
+      expect(response).to have_http_status(:bad_request)
+      expect(JSON.parse(response.body)["errors"]).to include(/Lat/)
+    end
+
+    it "returns 400 for non-integer page" do
+      get api_v1_deals_path, params: { page: "abc" }
+      expect(response).to have_http_status(:bad_request)
+      expect(JSON.parse(response.body)["errors"]).to include(/Page/)
+    end
+
+    it "returns 200 for valid parameters" do
+      get api_v1_deals_path, params: { min: 10, max: 100, lat: 37.7, lon: -122.4, page: 1 }
+      expect(response).to have_http_status(:ok)
+    end
   end
 end

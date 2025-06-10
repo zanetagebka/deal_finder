@@ -14,7 +14,7 @@ class DealFilterService
     query = filter_by_price_range(query) if @p[:min].present? || @p[:max].present?
     query = filter_by_tag(query) if @p[:tag].present?
     query = filter_by_radius(query) if @p[:lat].present? && @p[:lon].present? && @p[:radius].present?
-    query = filter_by_featured(query) if @p[:featured].present?
+    query = filter_by_featured(query) if @p.key?(:featured)
     query = filter_by_available(query) if @p[:available].present?
     query = filter_not_expired(query)
     query.distinct

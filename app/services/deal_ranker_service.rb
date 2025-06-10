@@ -14,9 +14,9 @@ class DealRankerService
                  :id, :discount_percentage, :quantity_sold, :featured_deal,
                  :expiry_date, :merchant_id
                ).includes(merchant: :location)
-             else
+    else
                deal_scope
-             end
+    end
     @weights = normalize_weights(DEFAULT_WEIGHTS.merge(weights))
   end
 
@@ -95,7 +95,7 @@ class DealRankerService
     max_distance = 50.0
     return 1.0 if distance_km <= 0
 
-    [(max_distance - distance_km) / max_distance, 0.0].max
+    [ (max_distance - distance_km) / max_distance, 0.0 ].max
   end
 
   def popularity_score(quantity_sold)
@@ -111,7 +111,7 @@ class DealRankerService
     days_until_expiry = (expiry_date - Date.current).to_i
     return 0.0 if days_until_expiry <= 0
 
-    [1.0 - (days_until_expiry.to_f / 30.0), 0.0].max
+    [ 1.0 - (days_until_expiry.to_f / 30.0), 0.0 ].max
   end
 
   def has_location?(deal)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'active_model'
+require "active_model"
 
 class DealsFilterParams
   include ActiveModel::Model
@@ -13,8 +13,8 @@ class DealsFilterParams
   validates :lon, numericality: { allow_nil: true, greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }, allow_blank: true
   validates :radius, numericality: { allow_nil: true, greater_than: 0 }, allow_blank: true
   validates :page, numericality: { only_integer: true, allow_nil: true, greater_than: 0 }, allow_blank: true
-  validates :featured, inclusion: { in: [true, false, 'true', 'false', nil, '', 0, 1] }, allow_blank: true
-  validates :available, inclusion: { in: [true, false, 'true', 'false', nil, '', 0, 1] }, allow_blank: true
+  validates :featured, inclusion: { in: [ true, false, "true", "false", nil, "", 0, 1 ] }, allow_blank: true
+  validates :available, inclusion: { in: [ true, false, "true", "false", nil, "", 0, 1 ] }, allow_blank: true
 
   def initialize(params = {})
     super(params)
@@ -52,9 +52,9 @@ class DealsFilterParams
 
   def to_boolean(val)
     return nil if val.nil? || (val.respond_to?(:empty?) && val.empty?)
-    return true if val == true || val.to_s.downcase == 'true' || val.to_s == '1'
-    return false if val == false || val.to_s.downcase == 'false' || val.to_s == '0'
-    
+    return true if val == true || val.to_s.downcase == "true" || val.to_s == "1"
+    return false if val == false || val.to_s.downcase == "false" || val.to_s == "0"
+
     nil
   end
-end 
+end

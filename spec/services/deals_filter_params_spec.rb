@@ -60,4 +60,4 @@ RSpec.describe DealsFilterParams do
       expect(params.sanitized_params).to include(category: 'Food', min: 10.0, featured: true, page: 1)
     end
   end
-end 
+end

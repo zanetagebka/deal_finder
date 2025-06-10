@@ -83,7 +83,7 @@ RSpec.describe DealRankerService do
                         expiry_date: Date.current + 10.days,
                         merchant: merchant_low_rating)
 
-        service = DealRankerService.new(Deal.where(id: [deal_1.id, deal_2.id]))
+        service = DealRankerService.new(Deal.where(id: [ deal_1.id, deal_2.id ]))
         ranked_deals = service.ranked
 
         expect(ranked_deals.first).to eq(deal_2)
@@ -106,7 +106,7 @@ RSpec.describe DealRankerService do
                                     expiry_date: Date.current + 10.days,
                                     merchant: merchant_high_rating)
 
-        service = DealRankerService.new(Deal.where(id: [deal_regular.id, deal_featured_test.id]))
+        service = DealRankerService.new(Deal.where(id: [ deal_regular.id, deal_featured_test.id ]))
         ranked_deals = service.ranked
 
         expect(ranked_deals.first).to eq(deal_featured_test)
@@ -129,7 +129,7 @@ RSpec.describe DealRankerService do
                                       expiry_date: Date.current + 5.days,
                                       merchant: merchant_high_rating)
 
-        service = DealRankerService.new(Deal.where(id: [deal_expiring_later.id, deal_expiring_sooner.id]))
+        service = DealRankerService.new(Deal.where(id: [ deal_expiring_later.id, deal_expiring_sooner.id ]))
         ranked_deals = service.ranked
 
         expect(ranked_deals.first).to eq(deal_expiring_sooner)
@@ -182,7 +182,7 @@ RSpec.describe DealRankerService do
       deal_1 = create(:deal, quantity_sold: 50)
       deal_2 = create(:deal, quantity_sold: 200)
 
-      deal_scope = Deal.where(id: [deal_1.id, deal_2.id])
+      deal_scope = Deal.where(id: [ deal_1.id, deal_2.id ])
       service = DealRankerService.new(deal_scope)
       max_quantity = 200
 
